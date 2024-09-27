@@ -1,34 +1,62 @@
 // En este modelo reducido, vamos a considerar las siguientes cosas que podrían ser interesantes para comprar: una heladera que vale 200000 pesos, una cama que sale 80000, una tira de asado que sale 3500 pesos, un paquete de fideos que sale 500 pesos, y una plancha que vale 12000 pesos. Por las dudas aclaramos: la cama no es un electrodoméstico, la plancha sí.
-let tienda2 = {
-  tira_de_asado : {
-    precio: 3500,
-    moneda: "ARG",
-    tipo: "comida"
+
+const plancha = {
+  nombreProducto(){
+    return "plancha"
   },
-  paquete_de_fideos : {
-    precio: 500,
-    moneda: "ARG",
-    tipo: "comida"
+  precio(){
+    return 12000
   },
-  cama : {
-    precio: 80000,
-    moneda: "ARG",
-    tipo: "mueble"
+  tipo(){
+    return "electrodomestico"
   },
-  plancha : {
-    precio: 12000,
-    moneda: "ARG",
-    tipo: "electrodomestico"
+  moneda(){
+    return "ARG"
+  }
+}
+
+const cama = {
+  nombreProducto(){
+    return "cama"
   },
-  heladera : {
-    precio:  200000,
-    moenda: "ARG",
-    tipo: "electrodomestico"
+  precio(){
+    return 80000
   },
-  obtener : function(nombre){
-    let keyFormat = nombre.replaceAll(" ","_")
-    if (this[keyFormat]) return Object.assign({producto: nombre}, this[keyFormat])
-    return false
+  tipo(){
+    return "mueble"
+  },
+  moneda(){
+    return "ARG"
+  }
+}
+
+const paqueteDeFideos = {
+  nombreProducto(){
+    return "paquete de fideos"
+  },
+  precio(){
+    return 500
+  },
+  tipo(){
+    return "comida"
+  },
+  moneda(){
+    return "ARG"
+  }
+}
+
+const tiraDeAsado = {
+  nombreProducto(){
+    return "tira de asado"
+  },
+  precio(){
+    return 3500
+  },
+  tipo(){
+    return "comida"
+  },
+  moneda(){
+    return "ARG"
   }
 }
 
@@ -45,28 +73,28 @@ let tienda2 = {
 // faltaComida(): indica si se han comprado menos de 2 cosas que son comida.
 
 let casaDePepeYJulian = {
-  valorTotal: 0,
-  elementos : {
-    electrodomestico : [],
-    mueble : [],
-    comida : []
+  elementos : [],
+  comprar(producto){
+    this.elementos.push(producto)
+    // console.log("se a comprado " + producto.nombreProducto())
   },
-  comprar : function (cosa){
-    let producto = tienda2.obtener(cosa)
-    if (producto){
-      this.elementos[producto.tipo].push(producto)
-      this.valorTotal += producto.precio
-
-      console.log("compra realizada!!")
-      console.log(this.elementos)
-    } else {
-      console.log("no se encuentra ese producto")
+  cantidadDeCosasCompradas(){
+    return this.elementos.length
+  },
+  tieneComida(){
+    return this.elementos.some(e => e.tipo() == "comida")
+  },
+  vieneDeEquiparse(){
+    if (this.elementos.length == 0){
+      return undefined
     }
+    
+    let ultimaCompra = this.elementos[this.elementos.length-1]
+    return (ultimaCompra.tipo() == "electrodomestico" || (ultimaCompra.precio() > 50000 && ultimaCompra.moneda() == "ARG")) ? true : false
   },
-  cantidadDeCosasCompradas : 1,
-  tieneComida : 1,
-  vieneDeEquiparse : 1,
-  esDerrochona : 1,
+  esDerrochona(){
+    return this.elementos.reduce((a,b) => a.precio() + b.precio(), 0)
+  },
   compraMasCara : 1,
   electrodomesticosComprados : 1,
   malaEpoca : 1,
@@ -74,4 +102,9 @@ let casaDePepeYJulian = {
   faltaComida : 1
 }
 
-casaDePepeYJulian.comprar("tira de asado")
+casaDePepeYJulian.comprar(paqueteDeFideos)
+casaDePepeYJulian.comprar(paqueteDeFideos)
+// casaDePepeYJulian.cantidadDeCosasCompradas()
+// casaDePepeYJulian.tieneComida()
+// casaDePepeYJulian.vieneDeEquiparse()
+casaDePepeYJulian.esDerrochona()
