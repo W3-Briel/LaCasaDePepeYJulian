@@ -60,6 +60,7 @@ const tiraDeAsado = {
   }
 }
 
+let productos = [plancha,cama,paqueteDeFideos,tiraDeAsado]
 // comprar(cosa): registra que se ha comprado una cosa.
 // cantidadDeCosasCompradas(): indica ... eso.
 // tieneComida(): indica si compró algo que es comida al menos una vez.
@@ -93,18 +94,34 @@ let casaDePepeYJulian = {
     return (ultimaCompra.tipo() == "electrodomestico" || (ultimaCompra.precio() > 50000 && ultimaCompra.moneda() == "ARG")) ? true : false
   },
   esDerrochona(){
-    return this.elementos.reduce((a,b) => a.precio() + b.precio(), 0)
+    return this.elementos.reduce((acc,p) => acc + p.precio(), 0)  > 90000
   },
-  compraMasCara : 1,
-  electrodomesticosComprados : 1,
-  malaEpoca : 1,
-  queFaltaComprar : 1,
-  faltaComida : 1
+  compraMasCara(){
+    return this.elementos.reduce((a,b) => a.precio() > b.precio() ?  a : b)
+  },
+  electrodomesticosComprados(){
+    return this.elementos.filter(a => a.tipo() == "electrodomestico")
+  },
+  malaEpoca(){
+    return this.elementos.every(a => a.tipo() == "comida")
+  },
+  queFaltaComprar(lista){
+    return lista.filter(a => !this.elementos.includes(a))
+  },
+  faltaComida(){
+    return this.elementos.filter(a => a.tipo() == "comida").length < 2
+  }
 }
 
+casaDePepeYJulian.comprar(tiraDeAsado)
 casaDePepeYJulian.comprar(paqueteDeFideos)
-casaDePepeYJulian.comprar(paqueteDeFideos)
+
+
 // casaDePepeYJulian.cantidadDeCosasCompradas()
 // casaDePepeYJulian.tieneComida()
 // casaDePepeYJulian.vieneDeEquiparse()
-casaDePepeYJulian.esDerrochona()
+// casaDePepeYJulian.esDerrochona()
+// casaDePepeYJulian.compraMasCara()
+// casaDePepeYJulian.malaEpoca()
+// casaDePepeYJulian.queFaltaComprar(productos)
+// casaDePepeYJulian.faltaComida()
